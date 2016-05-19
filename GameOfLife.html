@@ -23,9 +23,9 @@
         drawGrid();
     }
     function initBoard(){
-		for (var x = 0; x < canvas.height/20; x++) {
+		for (var x = 0; x < canvas.width/20; x++) {
             board[x] = [];
-			for (var y = 0; y < canvas.width/20; y++) {
+			for (var y = 0; y < canvas.height/20; y++) {
 				board[x][y] = 0;
 			}
 		}
@@ -60,7 +60,54 @@
     }
 
     function nextGen(){
+        var boardNext = [];
+        for (var i = 0; i < canvas.height/20; i++) {
+            boardNext[i] = [];
+		}
+        for (var x = 0; x < board.length; x++) {
+            for (var y = 0; y < board[x].length; y++) {
+                var n = 0;
+                for (var dx = -1; dx <= 1; dx++) {
+					for (var dy = -1; dy <= 1; dy++) {
+						if ( dx == 0 && dy == 0){}
+						else if (typeof board[x+dx] !== 'undefined' && typeof board[x+dx][y+dy] !== 'undefined' && board[x+dx][y+dy]) {
+							n++;
+						}
+					}
+				}
+                var c = board[x][y];
+				switch (n) {
+					case 0:
+					case 1:
+						c = 0;
+						break;
+					case 2:
+						break;
+					case 3:
+						c = 1;
+						break;
+					default:
+						c = 0;
+				}
+				boardNext[x][y] = c;
+			}
+		}
+		board = boardNext.slice();
+        drawBoard();
+    }
 
+    function drawBoard(){
+        for (var x = 0; x < board.length; x++) {
+            for (var y = 0; y < board[x].length; y++) {
+                if(board[x][y] == 1){
+                    ctx.fillStyle="white";
+                    ctx.fillRect( x*20+0.75, y*20+0.75,18.75,18.5);
+                }else {
+                    ctx.fillStyle="black";
+                    ctx.fillRect( x*20+0.75, y*20+0.75,18.75,18.5);
+                }
+            }
+        }
     }
 
     function drawGrid(){
