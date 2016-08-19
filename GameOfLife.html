@@ -6,7 +6,10 @@
     </head>
 
     <body onload="">
-        <canvas id="canvas" width="1000" height="800"></canvas>
+        <h1>Game of Life</h1>
+        <canvas id="canvas" width="1000" height="800"></canvas><br>
+        <input type="button" name="start" value="Start" onclick="start()">
+        <input type="button" name="stop" value="Stop" onclick="stop()">
     </body>
     <script type="text/javascript">
         var canvas = document.getElementById("canvas");
@@ -16,6 +19,25 @@
         var width = canvas.width;
         var size = 10;
         var oldMousePos = {x:0, y: 0};
+        var timer;
+        var timer_on = 0;
+
+        function counter(){
+            nextGen();
+            timer = setTimeout(function(){counter() }, 100);
+        }
+
+        function start(){
+            if (!timer_on) {
+                timer_on = 1;
+                counter();
+            }
+        }
+
+        function stop(){
+            clearTimeout(timer);
+            timer_on = 0;
+        }
 
         canvas.addEventListener('mousedown', function(evt) {
             eventPos(evt);
